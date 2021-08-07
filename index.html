@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <title>Text to Markdown</title>
+
+  </head>
+  
+  <!--Preview as html, pdf-->
+
+  <body class="bg-dark py-5">
+      <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <h1 class="text-white text-center">Text to Markdown</h1>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-center pt-3">
+            <div class="col-md-11">
+                <div class="card bg-light p-5">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <p>Enter Text</p>
+                                    <div id="editor"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="markdown" class="form-label">Markdown Version</label>
+                                    <textarea class="form-control mt-2" id="markdown" rows="15" name="markdown" disabled readonly autosize></textarea>
+                                </div>
+                            </div>
+                          </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+      </div>
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+    
+    <script>
+
+        var toolbarOptions = [
+            ['bold', 'italic',],        
+            ['blockquote', 'code-block', 'link'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],      
+            ['clean']                                         
+        ];
+
+        var quill = new Quill('#editor', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        theme: 'snow'
+        });
+
+        function convertToMarkdown(text){
+            const turndownService = new TurndownService();
+            const markdown = turndownService.turndown(text)
+            $('#markdown').html(markdown)
+        }
+
+        $('body').on('DOMSubtreeModified', '.ql-editor', function(){
+            convertToMarkdown($('.ql-editor').html())
+        });
+                    
+    </script>
+  </body>
+</html>
